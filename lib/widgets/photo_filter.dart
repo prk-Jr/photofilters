@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:photofilters/filters/filters.dart';
 import 'package:image/image.dart' as imageLib;
 import 'package:path_provider/path_provider.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
 
 class PhotoFilter extends StatelessWidget {
   final imageLib.Image image;
@@ -52,7 +53,7 @@ class PhotoFilter extends StatelessWidget {
 
 ///The PhotoFilterSelector Widget for apply filter from a selected set of filters
 class PhotoFilterSelector extends StatefulWidget {
-  final Widget title;
+  final String title;
 
   final List<Filter> filters;
   final imageLib.Image image;
@@ -82,7 +83,8 @@ class _PhotoFilterSelectorState extends State<PhotoFilterSelector> {
   Filter _filter;
   imageLib.Image image;
   bool loading;
-
+  static const primaryAccentColor = Color(0xFF00326b);
+  static const primarySecondColor = Color(0xFFED3269);
   @override
   void initState() {
     super.initState();
@@ -92,7 +94,6 @@ class _PhotoFilterSelectorState extends State<PhotoFilterSelector> {
     image = widget.image;
   }
 
-
   @override
   void dispose() {
     super.dispose();
@@ -101,8 +102,11 @@ class _PhotoFilterSelectorState extends State<PhotoFilterSelector> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: widget.title,
+      appBar: GradientAppBar(
+        backgroundColorStart: primaryAccentColor,
+        backgroundColorEnd: primarySecondColor,
+        centerTitle: true,
+        title: Text(widget.title, style: TextStyle(color: Colors.white)),
         actions: <Widget>[
           loading
               ? Container()
@@ -114,7 +118,7 @@ class _PhotoFilterSelectorState extends State<PhotoFilterSelector> {
                     });
                     var imageFile = await saveFilteredImage();
 
-                    Navigator.pop(context, {'image_filtered':imageFile} );
+                    Navigator.pop(context, {'image_filtered': imageFile});
                   },
                 )
         ],
@@ -165,8 +169,8 @@ class _PhotoFilterSelectorState extends State<PhotoFilterSelector> {
                               ),
                             ),
                             onTap: () => setState(() {
-                                  _filter = widget.filters[index];
-                                }),
+                              _filter = widget.filters[index];
+                            }),
                           );
                         },
                       ),
